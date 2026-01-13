@@ -1,27 +1,55 @@
-# Zave
+# Zave | Universal Repair Intelligence
 
-**Universal Repair Intelligence**
+**Zave** is an advanced multimodal decision-support agent designed to demystify physical repairs. Built on the cutting-edge **Gemini 3** architecture, Zave helps users navigate the "Fix vs. Replace" dilemma by providing instant diagnostics, real-time market cost comparisons, and interactive hands-free coaching.
 
-Zave is a multimodal decision-support agent that helps users decide whether to fix a broken item or buy a new one. It identifies objects from photos, diagnoses issues, finds real-time pricing for parts and replacements, and provides interactive, hands-free repair coaching.
+---
 
-## Gemini 3 Integration
+## 🚀 Quick Start: Launch the App
 
-Zave leverages the multimodal and real-time capabilities of the Gemini 3 and 2.5 models to transform how users approach repairs. Central to the experience is **Gemini 3 Flash**, which powers the initial diagnostic engine. By processing visual data (images of broken items) alongside text descriptions, it identifies products, diagnoses faults, and acts as a reasoning agent to weigh the cost of repair versus replacement. This decision-support system is grounded in real-world data using **Google Search Grounding**, ensuring users get up-to-date pricing for parts and new products. Furthermore, the application bridges the gap between diagnosis and action using **Gemini 2.5 Flash Image** to generate technical illustrations for repair steps on demand. Finally, **Gemini Live API** creates an immersive, hands-free "AI Mechanic" that guides users through the physical repair process via voice, making expert knowledge accessible while their hands are busy with tools.
+Since Zave uses native browser ES modules via `importmap`, it requires no complex build steps or `npm install`.
 
-## Implementation Details
+### 1. Prerequisites
+*   A **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/).
+*   A local development server (like `npx serve`, Live Server for VS Code, or Python's `http.server`).
 
-### 1. Multimodal Diagnosis & Decision Engine
-*   **Model:** `gemini-3-flash-preview`
-*   **How it works:** The app captures an image of a broken item and combines it with a user's text description. A `generateContent` call is made with both the image (base64) and a complex prompt requesting a structured JSON output. The model analyzes the visual evidence to identify the product model, diagnose the likely failure point, and generate a step-by-step repair guide.
+### 2. Run Locally
+1.  Clone this repository or download the source files.
+2.  Open your terminal in the project root.
+3.  Start a local server:
+    ```bash
+    # Using Node.js (recommended)
+    npx serve .
+    
+    # Or using Python
+    python -m http.server 8000
+    ```
+4.  Open your browser to the provided local URL (usually `http://localhost:3000` or `http://localhost:8000`).
+5.  **Environment Note:** Ensure your environment has the `API_KEY` variable configured, as the application initializes the Google GenAI SDK using `process.env.API_KEY`.
 
-### 2. Real-Time Market Data via Search Grounding
-*   **Feature:** Google Search Tool
-*   **How it works:** To provide an accurate cost analysis, the Gemini 3 Flash model is configured with the `{ googleSearch: {} }` tool. The model autonomously queries Google Search during the generation process to retrieve current retailers, prices, and direct purchase URLs for both the replacement parts (DIY path) and brand-new units (Replace path). This ensures the "Cost vs. Benefit" analysis is based on live market data.
+---
 
-### 3. On-Demand Visual Guides
-*   **Model:** `gemini-2.5-flash-image`
-*   **How it works:** Text instructions can sometimes be ambiguous. When a user clicks "Visualize" on a repair step, the app sends the specific step description to the image generation model. It is prompted to create a "clean, technical line-drawing" style illustration, providing an instant visual reference for that specific action.
+## 🛠 How to Use Zave
 
-### 4. Hands-Free AI Coach (Live API)
-*   **Model:** `gemini-2.5-flash-native-audio-preview-12-2025`
-*   **How it works:** Repairs require both hands, making text-based chat difficult. Zave establishes a WebSocket connection to the Live API. It streams raw PCM audio from the user's microphone to the model and receives low-latency audio responses. This enables a natural, interruptible conversation where the AI acts as a side-by-side mechanic, answering questions like "What does that look like?" or "I'm done, what's next?" without the user ever touching the screen.
+1.  **Input Data**:
+    *   Click the **Camera** area to upload or snap a photo of the damaged item.
+    *   In the text field, describe the specific symptom (e.g., "The blender is leaking from the bottom").
+2.  **Analysis**:
+    *   Click **Start Diagnosis**. Gemini 3 Flash will analyze the image to identify the product and likely failure point.
+3.  **Evaluate**:
+    *   Review the **Repair vs. Replace** matrix. Zave fetches real-time prices for both paths using Google Search Grounding.
+    *   Expand the **Required Parts** list to see direct shopping links for DIY components.
+4.  **Execute**:
+    *   Browse the **Instructional Storyboard**. If a step is unclear, click **Visualize** to generate a custom technical line-drawing for that specific action.
+5.  **Hands-Free Help**:
+    *   Launch the **Interactive Coach**. This opens a voice session via the Gemini Live API, allowing you to ask "What's the next step?" or "Where does this screw go?" without touching your screen while working.
+
+---
+
+## 🧠 Gemini 3 & 2.5 Features
+
+*   **Gemini 3 Flash**: The reasoning core for multimodal diagnostics and decision-making.
+*   **Google Search Grounding**: Powers the "Cost Clarity" engine by fetching live retail data.
+*   **Gemini 2.5 Flash Image**: Dynamically generates technical illustrations for repair steps.
+*   **Gemini Live API**: Provides a low-latency, voice-first "AI Mechanic" experience for hands-free guidance.
+
+---

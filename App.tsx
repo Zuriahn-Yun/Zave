@@ -105,6 +105,11 @@ const App: React.FC = () => {
   const startAnalysis = async () => {
     if (!imageFile) return;
     
+    // Clear previous results to prevent stale data overlay
+    setAnalysis(null);
+    setGeneratedImages({});
+    setError(null);
+    
     setState(AppState.ANALYZING);
     try {
       const base64 = await fileToGenerativePart(imageFile);
@@ -116,6 +121,16 @@ const App: React.FC = () => {
       setError("Analysis failed. Please try again with a clearer image or description.");
       setState(AppState.IDLE);
     }
+  };
+
+  const resetApp = () => {
+    setState(AppState.IDLE);
+    setAnalysis(null);
+    setGeneratedImages({});
+    setImageFile(null);
+    setPreviewUrl(null);
+    setUserDescription("");
+    setError(null);
   };
 
   const generateImageForStep = async (stepIndex: number, description: string) => {
@@ -201,7 +216,9 @@ const App: React.FC = () => {
             </div>
 
             <div className="relative">
-                <PenTool className="absolute top-4 left-4 text-slate-400 w-4 h-4" />
+                <div className="absolute top-4 left-4 text-slate-400 w-4 h-4 pointer-events-none">
+                   <PenTool size={16} />
+                </div>
                 <textarea 
                     value={userDescription}
                     onChange={(e) => setUserDescription(e.target.value)}
@@ -474,7 +491,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans selection:bg-indigo-100 selection:text-indigo-700 dark:selection:bg-indigo-500/30 dark:selection:text-indigo-200 transition-colors duration-300">
       <nav className="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md sticky top-0 z-40 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setState(AppState.IDLE)}>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={resetApp}>
             <div className="w-10 h-10 bg-slate-900 dark:bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
                  <Wrench size={20} className="fill-white/20" />
             </div>
@@ -492,7 +509,7 @@ const App: React.FC = () => {
 
             {state !== AppState.IDLE && (
                 <button 
-                    onClick={() => setState(AppState.IDLE)} 
+                    onClick={resetApp} 
                     className="text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 px-5 py-2.5 rounded-xl transition border border-transparent dark:border-slate-800"
                 >
                     New Analysis
