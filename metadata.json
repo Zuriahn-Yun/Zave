@@ -1,0 +1,7 @@
+{
+  "name": "Zave",
+  "description": "Universal repair decision engine. Compare DIY costs vs buying new, with interactive repair coaching.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
